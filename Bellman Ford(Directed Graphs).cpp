@@ -9,20 +9,21 @@ bool bellman_ford(vector<tuple<int, int, int>>& edge_list,map<int, int>& distanc
     distance[source] = 0;
     while(distance_reduced && count < distance.size())
     {
-        distance_reduced = false;
+        distance_reduced = false; // if no Relaxation occurs in one round of traversing edge list, we are done
         for (auto edge : edge_list)
         {
             int a, b, w;
             tie(a, b, w) = edge;
-            if(distance[a] + w < distance[b] && distance[a] != maxint)
+            if(distance[a] + w < distance[b] && distance[a] != maxint) // second condition to prevent overflow into negative numbers
             {
+                // Relaxing edge (a, b)
                 distance_reduced = true;
                 distance[b] = distance[a] + w;
             }
         }
-        count++;
+        count++; // if we traversed edge list (n - 1) all vertices must now have shortest distance value from source if no neg cycles
     }
-    return count != distance.size();
+    return count != distance.size(); // count == distance.size() we have got relaxations on nth round => negative weight cycle
 }
 int main()
 {
@@ -30,7 +31,7 @@ int main()
     bool neg_cycle;
     map<int, int> distance;
     int i, n, k, node, a, b, w;
-    cin>>n>>k;
+    cin>>n>>k; // n = #Nodes, k = #Edges
     for(i = 0; i < n; i++)
     {
         cin>>node;
@@ -38,7 +39,7 @@ int main()
     }
     for(i = 0; i < k; i++)
     {
-        cin>>a>>b>>w;
+        cin>>a>>b>>w; // edge(a, b) with weight w
         edge_list.emplace_back(a, b, w);
     }
     cin>>node;
