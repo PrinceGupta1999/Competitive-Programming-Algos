@@ -2,13 +2,14 @@
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;
 using namespace std;
-#define mod 1000000007
+#define mod 1000000007 
 typedef long long ll;
 typedef long double ld;
-template <typename T> using indexed_set = tree<T, null_type, less<>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using indexed_set = tree<T, null_type, less<>, rb_tree_tag, tree_order_statistics_node_update>; // an improved RB Tree for getting node <---> order
 int main()
 {
-    ios::sync_with_stdio(false);
+    /* fast input and output */
+    ios::sync_with_stdio(false); 
     cin.tie(nullptr);
     cout.tie(nullptr);
     ll t, n, i;
@@ -16,7 +17,7 @@ int main()
     while(t--)
     {
         cin>>n;
-
+        cout<<t<<" "<<n<<"\n";
     }
     return 0;
 }
