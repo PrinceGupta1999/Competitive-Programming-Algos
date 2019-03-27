@@ -44,19 +44,19 @@ struct Bitmask
         return ((1 << idx) & s) != 0;
     }
 };
-ll union_binary_set(Bitmask a, Bitmask b)
+ll union_bitmask(Bitmask a, Bitmask b)
 {
     if(a.sz == b.sz)
         return a.s | b.s;
     return -1;
 }
-ll intersect_binary_set(Bitmask a, Bitmask b)
+ll intersect_bitmask(Bitmask a, Bitmask b)
 {
     if(a.sz == b.sz)
         return a.s & b.s;
     return -1;
 }
-ll subtract_binary_set(Bitmask a, Bitmask b)
+ll subtract_bitmask(Bitmask a, Bitmask b)
 {
     if(a.sz == b.sz)
         return a.s | !(b.s);
