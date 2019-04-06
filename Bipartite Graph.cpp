@@ -24,30 +24,30 @@ ll power(ll x, ll y, ll p)
     }
     return res;
 }
-void addEdge(vector<int> adj[], int u, int v)
+void addEdge(vector<int> adj[], int u, int v) // Add Undirected Edge b/w u and v
 {
     adj[u].push_back(v);
     adj[v].push_back(u);
 }
-bool isBipartite(vector<int> adj[], int u, bool color[])
+bool isBipartite(vector<int> adj[], int u, bool color[]) // Checks graph with starting point u Bipartite and returns no of vertices in each component
 {
-    for (auto v : adj[u])
+    for (auto v : adj[u]) // Looping over u's neighbours
     {
-        if (unvisited.find(v) != unvisited.end())
+        if (unvisited.find(v) != unvisited.end()) // Check if vertice visited
         {
-            unvisited.erase(v);
+            unvisited.erase(v); // v not visited thus giving it color 
             color[v] = !color[u];
             if(color[v])
                 odd += 1;
             else
                 even += 1;
-            if (!isBipartite(adj, v, color))
+            if (!isBipartite(adj, v, color)) // Check graph from v is Bipartite
                 return false;
         }
-        else if (color[u] == color[v])
+        else if (color[u] == color[v]) // if v visited and color same as u => Not Bipartite
             return false;
     }
-    return true;
+    return true; // Graph at u Bipartite
 }
 int main()
 {
@@ -70,16 +70,16 @@ int main()
         }
         for(i = 1; i <= n; i++)
             unvisited.insert(i);
-        while(!unvisited.empty())
+        while(!unvisited.empty()) // Looping Over All Components
         {
             int s = *unvisited.begin();
             unvisited.erase(s);
             odd = 1;
             even = 0;
             color[s] = true;
-            if(!isBipartite(adj, s, color))
+            if(!isBipartite(adj, s, color)) // Check if component is Bipartite
             {
-                poss = false;
+                poss = false; // Not Bipartite
                 unvisited.clear();
                 break;
             }
