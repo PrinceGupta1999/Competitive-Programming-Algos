@@ -6,37 +6,37 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 typedef tree<ll, null_type, less<>, rb_tree_tag, tree_order_statistics_node_update> indexed_set;
-ll findSet(ll x, ll p[])
+ll findSet(ll x, ll p[]) // Finds representative of a set
 {
-    if(p[x] != x)
-        p[x] = findSet(p[x], p);
-    return p[x];
+    if(p[x] != x) // Check if x is not representative
+        p[x] = findSet(p[x], p); // Perform Path Compression
+    return p[x]; // Return parent
 }
 // Basic Version
-ll linkSet(ll x, ll y, ll p[], ll r[])
+ll linkSet(ll x, ll y, ll p[], ll r[]) // Merge the smaller set into larger set
 {
-    if(x != y)
+    if(x != y) // Check if both sets are equal
     {
-        if(r[x] > r[y])
+        if(r[x] > r[y]) // Use Principle of Ranks to approximate size of set
         {
-            p[y] = x;
-            return x;
+            p[y] = x; // Representative of smaller set now points to larger set
+            return x; // Return representative of new set
         }
         else
         {
-            p[x] = y;
+            p[x] = y; // Representative of smaller set now points to larger set
             if(r[x] == r[y])
                 r[y]++;
-            return y;
+            return y; // Return representative of new set
         }
     }
     return x;
 }
 ll unionSet(ll x, ll y, ll p[], ll r[])
 {
-    return linkSet(findSet(x, p), findSet(y, p), p, r);
+    return linkSet(findSet(x, p), findSet(y, p), p, r); // Link representatives of both sets
 }
-// Calculate Params including Size, Min/Max, Sum
+// Calculate Params including Size(sz), Min(mn)/Max(mx), Sum(s) 
 ll linkSet(ll x, ll y, ll p[], ll r[], ll s[], ll m[], ll sz[])
 {
     if(x != y)
@@ -82,7 +82,7 @@ int main()
         mn = INT32_MAX;
         ll a[n], p[n], r[n], s[n], m[n], sz[n];
         pair<ll, ll> b[n];
-        for(i = 0; i < n; i++)
+        for(i = 0; i < n; i++) // Initialize all sets as separate of unit size and rank 0
         {
             cin>>a[i];
             mn = min(a[i], mn);
