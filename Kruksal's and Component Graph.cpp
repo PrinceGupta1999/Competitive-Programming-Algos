@@ -1,3 +1,4 @@
+// Prerequisite => Disjoint Set Union(DSU)
 #include<bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;
@@ -7,6 +8,7 @@ typedef long long ll;
 typedef long double ld;
 typedef tree<ll, null_type, less<>, rb_tree_tag, tree_order_statistics_node_update> indexed_set;
 int p[100001], r[100001];
+// Functions for implementing DSU
 int findSet(int x)
 {
     if(p[x] != x)
@@ -43,43 +45,30 @@ int main()
     cout.tie(nullptr);
     int n, m, i, x, y, c, totalCost = 0;
     cin>>n>>m;
-    for(i = 0; i <= n; i++)
+    for(i = 0; i <= n; i++) // Initialization of sets
     {
         r[i] = 0;
         p[i] = i;
     }
-    for(i = 0; i < m; i++)
+    for(i = 0; i < m; i++) // Union of Sets
     {
         cin>>x>>y;
         unionSet(x, y);
     }
-    map<int, int> components;
+    set<int> components;
     for(i = 1; i <= n; i++)
     {
         cin>>c;
         x = findSet(i);
-        if(components.find(x) == components.end())
-            components[x] = INT32_MAX;
-        if(c >= 0)
-            components[x] = min(components[x], c);
-    }
-    if(components.size() == 1)
-    {
-        cout<<0;
-        return 0;
-    }
-    c = INT32_MAX;
-    for(auto cost : components)
-    {
-        if(cost.second == INT32_MAX)
+        if(components.find(x) == components.end()) // Representative x not currently in components => new component
         {
-            cout<<-1;
-            return 0;
+            components.insert(x);
+            cout<<"Component "<<x<<": ";
+            for(int j = 0; j < n; j++)
+                if(findSet(j) == x)
+                    cout<<j<<" ";
+            cout<<"\n";
         }
-        totalCost += cost.second;
-        c = min(c, cost.second);
     }
-    totalCost += (components.size() - 2) * c;
-    cout<<totalCost;
     return 0;
 }
