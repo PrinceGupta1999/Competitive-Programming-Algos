@@ -9,7 +9,7 @@ template <typename T> using indexed_set = tree<T, null_type, less<>, rb_tree_tag
 
 #define szSieve 100000
 ll sieve[szSieve + 1];
-vector<ll> primes;
+vector<ll> primes; // Array for storing primes in [2, szSieve]
 map<ll, ll> c;
 
 // Prepares a Sieve such that sieve[i] = 0 => i == prime else sieve[i] == largest prime factor of i
@@ -18,9 +18,9 @@ void prepareSieve()
 {
     for (ll x = 2; x <= szSieve; x++)
     {
-        if (sieve[x]) continue;
+        if (sieve[x]) continue; // if not prime => continue
         primes.push_back(x);
-        for (ll u = 2 * x; u <= szSieve; u += x) {
+        for (ll u = 2 * x; u <= szSieve; u += x) { // Make all multiples of x non prime
             sieve[u] = x;
         }
     }
@@ -31,11 +31,11 @@ void factorize(ll n)
 {
     for(auto x : primes)
     {
-        if (x * x > n || n <= szSieve)
+        if (x * x > n || n <= szSieve) // if (no more factors) or (n in [1, szSieve]) 
             break;
-        if(sieve[x])
+        if(sieve[x]) // if x not prime 
             continue;
-        while(n % x == 0)
+        while(n % x == 0) // get no. of times n divisible by x
         {
             c[x]++;
             n /= x;
@@ -43,13 +43,13 @@ void factorize(ll n)
     }
     if(n <= szSieve)
     {
-        while(sieve[n])
+        while(sieve[n]) // sieve[n] = greatest prime factor of n
         {
-            c[sieve[n]]++;
-            n /= sieve[n];
+            c[sieve[n]]++; // increase power of factor
+            n /= sieve[n]; // reduce n
         }
     }
-    if (n > 1)
+    if (n > 1) // get last prime factor != 1
         c[n]++;
 }
 
@@ -75,9 +75,9 @@ ll power(ll x, ll y, ll p)
 // TC = O(lg(n))
 ll numCoPrimes(ll n)
 {
-    factorize(n);
+    factorize(n); // get all factors
     ll r = 1;
-    for(auto factor : c)
+    for(auto factor : c) // Evaluate Euler's Totient Func.
         r *= power(factor.first, factor.second - 1, mod) * (factor.first - 1);
     return r;
 }
@@ -86,11 +86,11 @@ ll numCoPrimes(ll n)
 // TC ~= O(lg^2(n))
 ll moduloInverse(ll n, ll m, bool primeM = false)
 {
-    if(__gcd(m, n) != 1)
+    if(__gcd(m, n) != 1) // modulo inverse not possible
         return 0;
-    if(primeM)
+    if(primeM) // To ease calculation if we know one of numbers is prime
         return power(n, m - 2, m);
-    return power(n, numCoPrimes(m) - 1, m);
+    return power(n, numCoPrimes(m) - 1, m); // Fermat's Equation
 }
 
 
@@ -100,16 +100,16 @@ ll extendedEuclid(ll a, ll b, ll &x, ll &y)
 {
     if(a == 0)
     {
-        x = 0, y = 1;
-        return b;
+        x = 0, y = 1; // Get x and y
+        return b; // Return gcd
     }
     ll x1, y1, gcd = extendedEuclid(a, b, x1, y1);
-    x = y1 - (a / b) * x1;
+    x = y1 - (a / b) * x1; // Evaluate new x, y from previous
     y = x1;
-    return gcd;
+    return gcd; // Return gcd
 }
 
-// Inverse Modulo using EE
+// Inverse Modulo using Extended Euclid
 // if gcd(a, b) = 1 then x = a^-1 modulo b and y = b ^ -1 modulo a
 ll moduloInverseEE(ll a, ll m)
 {
